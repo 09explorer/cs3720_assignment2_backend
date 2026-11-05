@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from pymongo import MongoClient
+from pymongo.errors import PyMongoError
 # from datetime import datetime
 
 # --- MongoDB connection ---
@@ -49,3 +50,24 @@ def add_robot(robot: Robot):
     collection.insert_one(robot.dict())
     return {"message": "Robot added successfully"}
 
+@app.get("/robotse")
+def get_robots():
+    try:
+        if "robots" not in db.list_collection_names():
+            raise HTTPException(status_code=404, detail="Collection 'robots' not found")
+        # Try to retrieve all documents from MongoDB
+        robots = list(collection.find())
+        
+        # Convert ObjectId to string for each robot
+        for r in robots:
+            r["_id"] = str(r["_id"])
+        
+        return robots
+    except HTTPException:
+        raise  # let FastAPI handle our own HTTP errors
+    except PyMongoError as e:
+        print("Database error:", e)
+        raise HTTPException(status_code=503, detail="Database not reachable")
+    except Exception as e:
+        print("Unexpected error:", e)
+        raise HTTPException(status_code=500, detail="Internal server error")

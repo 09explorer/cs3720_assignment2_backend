@@ -15,7 +15,7 @@ uri = "mongodb+srv://tennisboy421_db_user:fZdpfWqM9NtvuvQa@cluster0.qx92fh5.mong
 
 client = MongoClient(uri)
 db = client["cs3720db"]               # Database name
-collection = db["robots"]             # Collection name (not robots.json, just robots)
+collection = db["robots2"]             # Collection name (not robots.json, just robots)
 
 # --- FastAPI app setup ---
 app = FastAPI()

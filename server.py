@@ -100,7 +100,7 @@ def get_robots():
 
 
 
-@app.post("/robots", status_code=status.HTTP_201_CREATED)
+@app.post("/robotse", status_code=status.HTTP_201_CREATED)
 def add_robot(robot: Robot):
     try:
         if "robots" not in db.list_collection_names():
